@@ -405,3 +405,11 @@ function descargarArchivo(url){
     })
     .catch(error => console.error('Error al obtener productos:', error));
 }
+
+function verificarEdicionCita(event, estado){
+    if(estado != "Pendiente"){
+        event.preventDefault();
+        alert("Una vez aceptada o rechazada la cita ya no se puede editar");
+    }
+
+}

@@ -25,13 +25,6 @@
                 </div>
                 <br>
                 <div>
-                    <label for="fechaCreacion">
-                        Fecha de Creación: <br>
-                        <input type="text" form="frm-crear-nota<?= $rows['idCita'] ?>" name="fechaCreacion" id="fechaCreacion-modalGestionNotas-<?= $rows['idCita'] ?>" placeholder="Fecha de Creación" readonly required>
-                    </label>
-                </div>
-                <br>
-                <div>
                     <label for="horaInicio">
                         Hora de inicio: <br>
                         <input type="text" form="frm-crear-nota<?= $rows['idCita'] ?>" name="horaInicio" id="horaInicio" placeholder="Hora de Inicio" required>
@@ -45,6 +38,7 @@
                     </label>
                 </div>
                 <br>
+                <input type="hidden">
                 <div>
                     <label for="calificacionP1">
                         Calificación del Parcial 1: <br>
@@ -76,7 +70,7 @@
         </div>
     </div>
 </div>
-<script>
+<!-- <script>
     document.addEventListener("DOMContentLoaded", function () {
         const modalGestionNotas = document.getElementById("modalGestionNotas-<?= $rows['idCita'] ?>");
         const fechaCreacionInput = document.getElementById("fechaCreacion-modalGestionNotas-<?= $rows['idCita'] ?>");
@@ -87,4 +81,4 @@
             fechaCreacionInput.value = fechaActual; 
         });
     });
-</script>
+</script> -->

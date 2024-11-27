@@ -401,7 +401,8 @@ class Controlador{
     function crearCita(){
         $tema = $_POST['tema'];
         $detalles = $_POST['detalles'];
-        $fechaEnvio = $_POST['fechaEnvio'];
+        date_default_timezone_set("America/Mexico_City");
+        $fechaEnvio = date("Y-m-d");
         $profesor_matricula = $_POST['profesor_matricula'];
         $asignatura_idAsignatura = $_POST['asignatura_idAsignatura'];
         $alumno_matricula = $_SESSION['matricula'];
@@ -587,7 +588,8 @@ class Controlador{
         $idCita = $_POST['idCita']; 
        $titulo = $_POST['titulo'];
        $cuerpo = $_POST['cuerpo'];
-       $fechaCreacion = $_POST['fechaCreacion'];
+       date_default_timezone_set("America/Mexico_City");
+       $fechaCreacion = date("Y-m-d");
        $horaInicio = $_POST['horaInicio'];
        $horaFin = NULL;
        if(isset($_POST['horaFin']) && $_POST['horaFin'] !== ''){
@@ -607,7 +609,8 @@ class Controlador{
         $idNota = $_POST['idNota']; 
         $titulo = $_POST['titulo'];
         $cuerpo = $_POST['cuerpo'];
-        $fechaCreacion = $_POST['fechaCreacion'];
+        date_default_timezone_set("America/Mexico_City");
+        $fechaCreacion = date("Y-m-d");
         $horaInicio = $_POST['horaInicio'];
         $horaFin = NULL;
         if(isset($_POST['horaFin']) && $_POST['horaFin'] !== ''){

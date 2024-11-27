@@ -22,13 +22,6 @@
                     </div>
                     <br>
                     <div>
-                        <label for="fechaEnvio">
-                            Fecha de Envío: <br>
-                            <input type="date" name="fechaEnvio" id="fechaEnvio" required>
-                        </label>
-                    </div>
-                    <br>
-                    <div>
                         <label for="profesor_matricula">
                             Profesor: <br>
                             <div>
