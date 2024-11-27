@@ -12,13 +12,6 @@ if(isset($_SESSION['tipoUsuario'])){
                 <h2> Gestion de disponibilidad </h2>
 
                 <div class="contenedor-accion-cuerpo">
-                    <form name="frm-busquedaDisponibilidad" action="" method="POST">
-                        <label for="matricula" class="label-body">
-                            <b>Matricula:</b> <br>
-                            <input type="text" name="matricula" required>
-                        </label>
-                        <button type="submit" name="opc" value="consultarUnaDisponibilidad" class="boton-primario" >Buscar</button>
-                    </form>
                     <br>
                     <div class="contenedor-tabla">
                         <table class="table tabla">
