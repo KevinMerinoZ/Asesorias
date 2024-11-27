@@ -253,3 +253,70 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+
+INSERT INTO alumno VALUES
+("mcko221851", "MCKO221851", "Kevin Joel", "Merino", "Castillo", "Masculino", "ITI", 7, 'D', 1),
+("ggco123456", "GGCO221851", "Carlos", "Guerrero", "Garcia", "Masculino", "ITI", 4, 'C', 1), 
+("ajjo654321", "AJJO654321", "Juana", "Arzate", "Buena Vista", "Femenino", "ITI", 7, 'B', 1),
+("rpdo987654", "RPDO987654", "Rosa", "Perez", "Dominguez", "Femenino", "ITI", 6, 'A', 1),
+("ldlo345678", "LDLO345678", "Luis", "Diaz", "Lopez", "Masculino", "ITI", 8, 'E', 1);
+
+INSERT INTO Directivo VALUES("gblo654321", "GBLO654321", "Luis Miguel", "Gallego", "Basteri", "Masculino", "Departamento de ITI", 1, 1);
+
+INSERT INTO disponibilidad VALUES (1, 'Otono', '10:00-14:00', '13:00-18:00', '12:00-20:00', '15:00-17:00', '10:00-14:00', 1);
+
+INSERT INTO profesor VALUES
+("pcfo123456", "pcfo123456", "Frida Lourdes", "Perez", "Colin", "Femenino", "Doctorado", "Desarrollo de software", 0, 1, 1, "gblo654321");
+
+INSERT INTO profesor VALUES("mcjo123456", "mcjo123456", "Jose", "Martinez", "Calderon", "Masculino", "Doctorado", "Matematicas avanzadas", 0, 1, 1, "gblo654321");
+INSERT INTO profesor VALUES("aglo234567", "aglo234567", "Ana", "Gonzalez", "Lopez", "Femenino", "Maestria", "Fisica aplicada", 0, 1, 1, "gblo654321");
+INSERT INTO profesor VALUES("frma345678", "frma345678", "Francisco", "Martinez", "Alvarado", "Masculino", "Doctorado", "Ingenieria de software", 0, 1, 1, "gblo654321");
+INSERT INTO profesor VALUES("mapi456789", "mapi456789", "Maria", "Perez", "Ibarra", "Femenino", "Licenciatura", "Quimica analitica", 0, 1, 1, "gblo654321");
+INSERT INTO profesor VALUES("juva567890", "juva567890", "Juan", "Valdez", "Arriaga", "Masculino", "Maestria", "Ciencias computacionales", 0, 1, 1, "gblo654321");
+INSERT INTO profesor VALUES("clro678901", "clro678901", "Claudia", "Rodriguez", "Orozco", "Femenino", "Doctorado", "Biologia molecular", 0, 1, 1, "gblo654321");
+
+INSERT INTO asignatura VALUES
+(0, 'Ingles', 'ING', 'Asignatura de ingles', 1),
+(0, 'Programacion', 'PRG', 'Asignatura de Programacion', 1),
+(0, 'Matematicas', 'MTA', 'Asignatura de Matematicas', 1),
+(0, 'Fisica', 'FIS', 'Asignatura de Fisica', 1),
+(0, 'Quimica', 'QUI', 'Asignatura de Quimica', 1),
+(0, 'Historia', 'HIS', 'Asignatura de Historia', 1),
+(0, 'Biologia', 'BIO', 'Asignatura de Biologia', 1),
+(0, 'Literatura', 'LIT', 'Asignatura de Literatura', 1),
+(0, 'Geografia', 'GEO', 'Asignatura de Geografia', 1),
+(0, 'Etica', 'ETI', 'Asignatura de Etica', 1),
+(0, 'Educacion Fisica', 'EDF', 'Asignatura de Educacion Fisica', 1);
+
+INSERT INTO profesorasignatura VALUES('pcfo123456', 2, 1);
+INSERT INTO profesorasignatura VALUES
+('juva567890', 2, 1), 
+('juva567890', 3, 1),
+('mcjo123456', 3, 1),
+('frma345678', 4, 1),
+('aglo234567', 5, 1),
+('mapi456789', 6, 1),
+('clro678901', 7, 1),
+('juva567890', 8, 1),
+('mcjo123456', 9, 1),
+('aglo234567', 10, 1);
+
+INSERT INTO tipomaterial VALUES(0, '.pdf', 'documentos pdf', 'diccionario', 1, "pcfo123456");
+INSERT INTO tipomaterial VALUES(0, '.docx', 'documentos word', 'diccionario', 1, "pcfo123456");
+INSERT INTO tipomaterial VALUES(0, '.docx', 'reportes word', 'reporte', 1, "pcfo123456");
+
+INSERT INTO cita VALUES
+(0, "Algebra", "ver el tema de algebra", "2024-09-24", "2024-09-25", "Aceptada", 1, "juva567890", 2, NULL, "mcko221851"),
+(0, "Programacion basica", "Resolver ejercicios de logica y sintaxis", "2024-08-15", "2024-09-16", "Aceptada", 1, "mcjo123456", 3, NULL, "ggco123456"),
+(0, "Historia", "Estudiar el periodo de la Revolucion", "2024-09-20", "2024-09-22", "Aceptada", 1, "frma345678", 4, NULL, "ajjo654321"),
+(0, "Quimica organica", "Entender estructuras de compuestos", "2024-10-01", "2024-10-02", "Aceptada", 1, "aglo234567", 5, NULL, "rpdo987654"),
+(0, "Fisica", "Resolver problemas de cinematica", "2024-10-05", "2024-10-06", "Pendiente", 1, "mapi456789", 6, NULL, "ldlo345678"),
+(0, "Biologia", "Estudiar genetica basica", "2024-06-10", "2024-06-11", "Aceptada", 1, "clro678901", 7, NULL, "mcko221851"),
+(0, "Educacion Fisica", "Planificar una rutina de ejercicio", "2024-10-12", "2024-10-13", "Pendiente", 1, "juva567890", 8, NULL, "ggco123456"),
+(0, "Literatura", "Analizar un poema contemporaneo", "2024-04-15", "2024-04-16", "Aceptada", 1, "mcjo123456", 9, NULL, "ajjo654321"),
+(0, "Geografia", "Comprender la tectonica de placas", "2024-03-20", "2024-03-21", "Aceptada", 1, "aglo234567", 10, NULL, "rpdo987654"),
+(0, "Matematicas", "Resolver problemas de algebra lineal", "2024-01-25", "2024-01-26", "Rechazada", 1, "frma345678", 4, NULL, "ldlo345678"),
+(0, "Biologia", "Algebra basica", "2024-06-20", "2024-06-21", "Aceptada", 1, "clro678901", 7, NULL, "ldlo345678"),
+(0, "Biologia", "Biologia basica", "2024-07-20", "2024-07-21", "Aceptada", 1, "clro678901", 7, NULL, "rpdo987654");
+

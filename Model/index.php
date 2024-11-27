@@ -38,95 +38,194 @@
         
         
         /************** Gestion Alumnos **************/
-        function consultarTodosAlumnos(){
+        /**
+         * Consultar todos los alumnos activos.
+         * 
+         * @return mysqli_result Resultado de la consulta con todos los alumnos activos.
+         */
+        function consultarTodosAlumnos() {
             $sql = "SELECT * FROM Alumno WHERE existencia=1;";
             $exec = mysqli_query($this->conn, $sql);
 
             return $exec;
         }
 
-        function consultarUnAlumno($matricula){
+        /**
+         * Consultar un alumno específico por su matrícula, si está activo.
+         * 
+         * @param string $matricula Matrícula del alumno a consultar.
+         * @return mysqli_result Resultado de la consulta con los datos del alumno.
+         */
+        function consultarUnAlumno($matricula) {
             $sql = "SELECT * FROM Alumno WHERE matricula='$matricula' AND existencia=1;";
             $exec = mysqli_query($this->conn, $sql);
 
             return $exec;
         }
 
-        function crearAlumno($matricula, $contrasenia, $nombre, $apellidoP, $apellidoM, $genero, $carrera, $grado, $grupo){
+        /**
+         * Crear un nuevo registro de alumno en la base de datos.
+         * 
+         * @param string $matricula Matrícula del alumno.
+         * @param string $contrasenia Contraseña del alumno.
+         * @param string $nombre Nombre del alumno.
+         * @param string $apellidoP Apellido paterno del alumno.
+         * @param string $apellidoM Apellido materno del alumno.
+         * @param string $genero Género del alumno.
+         * @param string $carrera Carrera que cursa el alumno.
+         * @param int $grado Grado que cursa el alumno.
+         * @param string $grupo Grupo al que pertenece el alumno.
+         * @return bool|mysqli_result False si el alumno ya existe o ocurre un error, resultado de la consulta si tiene éxito.
+         */
+        function crearAlumno($matricula, $contrasenia, $nombre, $apellidoP, $apellidoM, $genero, $carrera, $grado, $grupo) {
             $comprobarAlum = $this->consultarUnAlumno($matricula);
-            if(($comprobarAlum == false) || (mysqli_num_rows($comprobarAlum) > 0)){
-                return false;
+            if (($comprobarAlum == false) || (mysqli_num_rows($comprobarAlum) > 0)) {
+                return false;  // El alumno ya existe o hay un error en la consulta
             }
+
             $sql = "INSERT INTO Alumno VALUES('$matricula', '$contrasenia', '$nombre', '$apellidoP', '$apellidoM', '$genero', '$carrera', $grado, '$grupo', 1);";
             $exec = mysqli_query($this->conn, $sql);
 
             return $exec;
-            
         }
 
-        function eliminarAlumno($matricula){
+        /**
+         * Eliminar (desactivar) un alumno mediante su matrícula.
+         * 
+         * @param string $matricula Matrícula del alumno a eliminar.
+         * @return mysqli_result Resultado de la consulta para desactivar al alumno.
+         */
+        function eliminarAlumno($matricula) {
             $sql = "UPDATE Alumno SET existencia=0 WHERE matricula='$matricula';";
             $exec = mysqli_query($this->conn, $sql);
 
             return $exec;
-            
         }
 
-        function actualizarAlumno($matricula, $contrasenia, $nombre, $apellidoP, $apellidoM, $genero, $carrera, $grado, $grupo){
-            $sql = "UPDATE Alumno SET contrasenia='$contrasenia', nombre='$nombre', apellidoP='$apellidoP', apellidoM='$apellidoM', genero='$genero', carrera='$carrera', grado=$grado, grupo='$grupo' WHERE matricula='$matricula' AND existencia=1;";
+        /**
+         * Actualizar los datos de un alumno existente.
+         * 
+         * @param string $matricula Matrícula del alumno a actualizar.
+         * @param string $contrasenia Nueva contraseña del alumno.
+         * @param string $nombre Nuevo nombre del alumno.
+         * @param string $apellidoP Nuevo apellido paterno del alumno.
+         * @param string $apellidoM Nuevo apellido materno del alumno.
+         * @param string $genero Nuevo género del alumno.
+         * @param string $carrera Nueva carrera del alumno.
+         * @param int $grado Nuevo grado del alumno.
+         * @param string $grupo Nuevo grupo del alumno.
+         * @return mysqli_result Resultado de la consulta para actualizar los datos del alumno.
+         */
+        function actualizarAlumno($matricula, $contrasenia, $nombre, $apellidoP, $apellidoM, $genero, $carrera, $grado, $grupo) {
+            $sql = "UPDATE Alumno 
+                    SET contrasenia='$contrasenia', 
+                        nombre='$nombre', 
+                        apellidoP='$apellidoP', 
+                        apellidoM='$apellidoM', 
+                        genero='$genero', 
+                        carrera='$carrera', 
+                        grado=$grado, 
+                        grupo='$grupo' 
+                    WHERE matricula='$matricula' AND existencia=1;";
             $exec = mysqli_query($this->conn, $sql);
 
             return $exec;
         }
 
         /************** Gestion Profesores **************/
-        function consultarTodosProfesores(){
+        /**
+         * Consultar todos los profesores activos.
+         * 
+         * @return mysqli_result Resultado de la consulta con todos los profesores activos.
+         */
+        function consultarTodosProfesores() {
             $sql = "SELECT * FROM Profesor WHERE existencia=1;";
             $exec = mysqli_query($this->conn, $sql);
 
             return $exec;
         }
 
-        function consultarUnProfesor($matricula){
+        /**
+         * Consultar un profesor específico por su matrícula, si está activo.
+         * 
+         * @param string $matricula Matrícula del profesor a consultar.
+         * @return mysqli_result Resultado de la consulta con los datos del profesor.
+         */
+        function consultarUnProfesor($matricula) {
             $sql = "SELECT * FROM Profesor WHERE matricula='$matricula' AND existencia=1;";
             $exec = mysqli_query($this->conn, $sql);
-            
+
             return $exec;
         }
 
-        function crearProfesor($matricula, $contrasenia, $nombre, $apellidoP, $apellidoM, $genero, $nivelEducativo, $especialidad, $estudiantesAtendidos, $directivo, $asignaturas){
+        /**
+         * Crear un nuevo registro de profesor en la base de datos.
+         * 
+         * @param string $matricula Matrícula del profesor.
+         * @param string $contrasenia Contraseña del profesor.
+         * @param string $nombre Nombre del profesor.
+         * @param string $apellidoP Apellido paterno del profesor.
+         * @param string $apellidoM Apellido materno del profesor.
+         * @param string $genero Género del profesor.
+         * @param string $nivelEducativo Nivel educativo del profesor.
+         * @param string $especialidad Especialidad del profesor.
+         * @param int $estudiantesAtendidos Número de estudiantes atendidos.
+         * @param string $directivo Matrícula del directivo asociado.
+         * @param array $asignaturas Lista de asignaturas que el profesor imparte.
+         * @return bool|mysqli_result False si falla la validación o la inserción, resultado de la consulta si tiene éxito.
+         */
+        function crearProfesor($matricula, $contrasenia, $nombre, $apellidoP, $apellidoM, $genero, $nivelEducativo, $especialidad, $estudiantesAtendidos, $directivo, $asignaturas) {
             $comprobarDirec = $this->consultarUnDirectivo($directivo);
             $comprobarProf = $this->consultarUnProfesor($matricula);
-            if(($comprobarDirec == false) || (mysqli_num_rows($comprobarDirec) == 0)){
+
+            if (($comprobarDirec == false) || (mysqli_num_rows($comprobarDirec) == 0)) {
                 return false;
             }
-            if(($comprobarProf == false) || (mysqli_num_rows($comprobarProf) > 0)){
+            if (($comprobarProf == false) || (mysqli_num_rows($comprobarProf) > 0)) {
                 return false;
             }
+
             $sql = "INSERT INTO Profesor VALUES('$matricula', '$contrasenia', '$nombre', '$apellidoP', '$apellidoM', '$genero', '$nivelEducativo', '$especialidad', $estudiantesAtendidos, 1, null, '$directivo');";
             $exec = mysqli_query($this->conn, $sql);
 
             $agregacionProfAsig = $this->agregarProfAsig($matricula, $asignaturas);
-
-            if(($agregacionProfAsig == false)){
+            if ($agregacionProfAsig == false) {
                 return false;
             }
 
             return $exec;
-            
         }
 
-        function eliminarProfesor($matricula){
+        /**
+         * Eliminar (desactivar) un profesor mediante su matrícula.
+         * 
+         * @param string $matricula Matrícula del profesor a eliminar.
+         * @return mysqli_result Resultado de la consulta para desactivar al profesor.
+         */
+        function eliminarProfesor($matricula) {
             $sql = "UPDATE Profesor SET existencia=0 WHERE matricula='$matricula';";
             $exec = mysqli_query($this->conn, $sql);
 
             return $exec;
         }
 
-        function actualizarProfesor($matricula, $nombre, $apellidoP, $apellidoM, $genero, $nivelEducativo, $especialidad, $estudiantesAtendidos, $directivo){
+        /**
+         * Actualizar los datos de un profesor existente.
+         * 
+         * @param string $matricula Matrícula del profesor a actualizar.
+         * @param string $nombre Nuevo nombre del profesor.
+         * @param string $apellidoP Nuevo apellido paterno del profesor.
+         * @param string $apellidoM Nuevo apellido materno del profesor.
+         * @param string $genero Nuevo género del profesor.
+         * @param string $nivelEducativo Nuevo nivel educativo del profesor.
+         * @param string $especialidad Nueva especialidad del profesor.
+         * @param int $estudiantesAtendidos Nuevo número de estudiantes atendidos.
+         * @param string $directivo Nueva matrícula del directivo asociado.
+         * @return bool|mysqli_result False si falla la validación, resultado de la consulta si tiene éxito.
+         */
+        function actualizarProfesor($matricula, $nombre, $apellidoP, $apellidoM, $genero, $nivelEducativo, $especialidad, $estudiantesAtendidos, $directivo) {
             $comprobarDirec = $this->consultarUnDirectivo($directivo);
-            if(($comprobarDirec == false) || (mysqli_num_rows($comprobarDirec) == 0)){
-                
+            if (($comprobarDirec == false) || (mysqli_num_rows($comprobarDirec) == 0)) {
                 return false;
             }
 
@@ -136,72 +235,118 @@
             return $exec;
         }
 
+
         /************** Funciones de la tabla profesorAsignatura **************/
-        function consultarAsignaturasProf($matricula){
-            $sql = "SELECT idAsignatura, asignatura.nombre FROM profesorasignatura, profesor, asignatura WHERE Profesor_matricula=matricula AND Asignatura_idAsignatura=idAsignatura AND matricula='$matricula' AND asignatura.existencia=1 AND profesor.existencia=1;";
+        /**
+         * Consultar las asignaturas de un profesor específico.
+         * 
+         * @param string $matricula Matrícula del profesor.
+         * @return string|int JSON con las asignaturas del profesor, -1 si ocurre un error, 0 si no tiene asignaturas.
+         */
+        function consultarAsignaturasProf($matricula) {
+            $sql = "SELECT idAsignatura, asignatura.nombre 
+                    FROM profesorasignatura, profesor, asignatura 
+                    WHERE Profesor_matricula=matricula 
+                    AND Asignatura_idAsignatura=idAsignatura 
+                    AND matricula='$matricula' 
+                    AND asignatura.existencia=1 
+                    AND profesor.existencia=1;";
             $exec = mysqli_query($this->conn, $sql);
 
-            if($exec == false){
-                return -1;
-            } 
-            if(mysqli_num_rows($exec) < 1){
-                return 0;
+            if ($exec == false) {
+                return -1;  // Error en la ejecución de la consulta
             }
-            
+            if (mysqli_num_rows($exec) < 1) {
+                return 0;  // El profesor no tiene asignaturas asociadas
+            }
+
             $Asignaturas = [];
-            while($fila = mysqli_fetch_assoc($exec)){
+            while ($fila = mysqli_fetch_assoc($exec)) {
                 $Asignaturas[] = $fila;
             }
 
-            $jsonAsignaturas = json_encode($Asignaturas);
-
-            return $jsonAsignaturas;
+            return json_encode($Asignaturas);  // Devuelve las asignaturas en formato JSON
         }
 
-        function consultarProfesorAsignaturas(){
-            $sql = "SELECT Profesor_matricula, Asignatura_idAsignatura FROM profesorasignatura, profesor, asignatura WHERE Profesor_matricula=matricula AND Asignatura_idAsignatura=idAsignatura AND asignatura.existencia=1 AND profesor.existencia=1;";
+        /**
+         * Consultar todas las relaciones entre profesores y asignaturas activas.
+         * 
+         * @return mysqli_result Resultado de la consulta con todas las relaciones activas entre profesores y asignaturas.
+         */
+        function consultarProfesorAsignaturas() {
+            $sql = "SELECT Profesor_matricula, Asignatura_idAsignatura 
+                    FROM profesorasignatura, profesor, asignatura 
+                    WHERE Profesor_matricula=matricula 
+                    AND Asignatura_idAsignatura=idAsignatura 
+                    AND asignatura.existencia=1 
+                    AND profesor.existencia=1;";
             $exec = mysqli_query($this->conn, $sql);
-            
+
             return $exec;
         }
 
-        function agregarProfAsig($matricula, $asignaturas){
-            foreach($asignaturas as $asig){
-                $sqlSelect = "SELECT * FROM profesorasignatura WHERE Profesor_matricula='$matricula' AND Asignatura_idAsignatura=$asig;";
+        /**
+         * Agregar relaciones entre un profesor y un conjunto de asignaturas.
+         * 
+         * @param string $matricula Matrícula del profesor.
+         * @param array $asignaturas Lista de identificadores de asignaturas a asociar.
+         * @return bool Resultado de la última operación ejecutada.
+         */
+        function agregarProfAsig($matricula, $asignaturas) {
+            foreach ($asignaturas as $asig) {
+                $sqlSelect = "SELECT * FROM profesorasignatura 
+                            WHERE Profesor_matricula='$matricula' 
+                                AND Asignatura_idAsignatura=$asig;";
                 $execSelect = mysqli_query($this->conn, $sqlSelect);
 
-                if(mysqli_num_rows($execSelect) == 0){
+                if (mysqli_num_rows($execSelect) == 0) {
+                    // Insertar nueva relación si no existe
                     $sql = "INSERT INTO profesorasignatura VALUES('$matricula', $asig, 1);";
-                    $exec = mysqli_query($this->conn, $sql);
-                }else{
-                    $sql = "UPDATE profesorasignatura SET existencia=1 WHERE Profesor_matricula='$matricula' AND Asignatura_idAsignatura=$asig;";
-                    $exec = mysqli_query($this->conn, $sql);
+                } else {
+                    // Reactivar relación existente
+                    $sql = "UPDATE profesorasignatura SET existencia=1 
+                            WHERE Profesor_matricula='$matricula' 
+                            AND Asignatura_idAsignatura=$asig;";
                 }
-                
+                $exec = mysqli_query($this->conn, $sql);
             }
 
             return $exec;
         }
 
-        function eliminarProfAsig($matricula){
-            $sql = "UPDATE profesorasignatura SET existencia=0 WHERE Profesor_matricula='$matricula';";
+        /**
+         * Desactivar todas las relaciones entre un profesor y sus asignaturas.
+         * 
+         * @param string $matricula Matrícula del profesor.
+         * @return mysqli_result Resultado de la consulta para desactivar las relaciones.
+         */
+        function eliminarProfAsig($matricula) {
+            $sql = "UPDATE profesorasignatura SET existencia=0 
+                    WHERE Profesor_matricula='$matricula';";
             $exec = mysqli_query($this->conn, $sql);
 
             return $exec;
         }
 
-        function actualizarProfAsig($matricula, $asignaturas){
+        /**
+         * Actualizar las asignaturas de un profesor.
+         * 
+         * @param string $matricula Matrícula del profesor.
+         * @param array $asignaturas Lista de identificadores de asignaturas nuevas.
+         * @return int Resultado de la operación: 1 si es exitosa, -1 si falla.
+         */
+        function actualizarProfAsig($matricula, $asignaturas) {
             $eliminarProfAsig = $this->eliminarProfAsig($matricula);
-            if(($eliminarProfAsig == false)){
-                return -1;
+            if ($eliminarProfAsig == false) {
+                return -1;  // Error al desactivar asignaturas previas
             }
 
             $agregacionProfAsig = $this->agregarProfAsig($matricula, $asignaturas);
-            if(($agregacionProfAsig == false)){
-                return -1;
+            if ($agregacionProfAsig == false) {
+                return -1;  // Error al agregar nuevas asignaturas
             }
 
-            return 1;
+            return 1;  // Operación exitosa
         }
 
         /************** Gestion Directivo **************/
@@ -273,147 +418,265 @@
         }
 
         /************** Gestion Citas **************/
-        function buscarCitaPorAsignatura($nomAsignatura){
+         /**
+         * Busca citas relacionadas con una asignatura específica para el alumno actual.
+         *
+         * @param string $nomAsignatura El nombre de la asignatura.
+         * @return mysqli_result|false  Resultado de la consulta o false en caso de error.
+         */
+        function buscarCitaPorAsignatura($nomAsignatura) {
             $alumnoMatricula = $_SESSION['matricula'];
-            $sql = "SELECT c.* FROM Cita c, asignatura a WHERE ProfesorAsignatura_Asignatura_idAsignatura=idAsignatura AND Alumno_matricula='$alumnoMatricula' AND a.nombre='$nomAsignatura' AND c.existencia=1 AND a.existencia=1;";
+            $sql = "SELECT c.* FROM Cita c, asignatura a 
+                    WHERE ProfesorAsignatura_Asignatura_idAsignatura = idAsignatura 
+                    AND Alumno_matricula = '$alumnoMatricula' 
+                    AND a.nombre = '$nomAsignatura' 
+                    AND c.existencia = 1 
+                    AND a.existencia = 1;";
             $exec = mysqli_query($this->conn, $sql);
             
             return $exec;
         }
 
-        function buscarCitaPorProfesor($matricula){
+        /**
+         * Busca citas asociadas con un profesor específico para el alumno actual.
+         *
+         * @param string $matricula La matrícula del profesor.
+         * @return mysqli_result|false  Resultado de la consulta o false en caso de error.
+         */
+        function buscarCitaPorProfesor($matricula) {
             $alumnoMatricula = $_SESSION['matricula'];
-            $sql = "SELECT * FROM Cita WHERE ProfesorAsignatura_Profesor_matricula='$matricula' AND Alumno_matricula='$alumnoMatricula' AND existencia=1;";
+            $sql = "SELECT * FROM Cita 
+                    WHERE ProfesorAsignatura_Profesor_matricula = '$matricula' 
+                    AND Alumno_matricula = '$alumnoMatricula' 
+                    AND existencia = 1;";
             $exec = mysqli_query($this->conn, $sql);
             
             return $exec;
         }
 
+        /**
+         * Consulta todas las citas asociadas con el usuario actual (alumno o profesor).
+         *
+         * @return mysqli_result|false|null  Resultado de la consulta, null si no hay sesión, o false en caso de error.
+         */
         function consultarTodasCitas() {
             if (!isset($_SESSION['matricula'])) {
                 return null; 
             }
             $matricula = $_SESSION['matricula'];
-            $sql = "SELECT * FROM Cita WHERE existencia = 1 
+            $sql = "SELECT * FROM Cita 
+                    WHERE existencia = 1 
                     AND (Alumno_matricula = '$matricula' OR ProfesorAsignatura_Profesor_matricula = '$matricula');";
             $exec = mysqli_query($this->conn, $sql);
             return $exec;
         }
 
+        /**
+         * Crea una nueva cita con los datos proporcionados.
+         *
+         * @param string $tema                El tema de la cita.
+         * @param string $detalles            Detalles de la cita.
+         * @param string $fechaEnvio          Fecha en que se envió la solicitud.
+         * @param string $estado              Estado inicial de la cita.
+         * @param string $profesor_matricula  Matrícula del profesor.
+         * @param int    $asignatura_idAsignatura ID de la asignatura.
+         * @param string $alumno_matricula    Matrícula del alumno.
+         * @return mysqli_result|false        Resultado de la consulta o false en caso de error.
+         */
         function crearCita($tema, $detalles, $fechaEnvio, $estado, $profesor_matricula, $asignatura_idAsignatura, $alumno_matricula) {
             $sql = "INSERT INTO Cita (tema, detalles, fechaEnvio, estado, existencia, ProfesorAsignatura_profesor_matricula, ProfesorAsignatura_Asignatura_idAsignatura, Alumno_matricula) 
                     VALUES ('$tema', '$detalles', '$fechaEnvio', '$estado', 1, '$profesor_matricula', $asignatura_idAsignatura, '$alumno_matricula');";
             $exec = mysqli_query($this->conn, $sql);
             return $exec;
         }
-        
+
+        /**
+         * Marca una cita como eliminada de manera lógica.
+         *
+         * @param int $idCita El ID de la cita.
+         * @return mysqli_result|false Resultado de la consulta o false en caso de error.
+         */
         function eliminarCita($idCita) {
-            $sql = "UPDATE Cita SET existencia=0 WHERE idCita = $idCita;";
+            $sql = "UPDATE Cita SET existencia = 0 WHERE idCita = $idCita;";
             $exec = mysqli_query($this->conn, $sql);
             return $exec;
         }
 
-        function actualizarCita($idCita, $tema, $detalles, $fechaEnvio, $fechaEstado, $estado, $profesor_matricula, $asignatura_idAsignatura, $nota_idNota, $alumno_matricula) {
+        /**
+         * Actualiza los datos de una cita existente.
+         *
+         * @param int    $idCita             El ID de la cita.
+         * @param string $tema               El tema de la cita.
+         * @param string $detalles           Detalles de la cita.
+         * @param string $fechaEnvio         Fecha en que se envió la cita.
+         * @param string $fechaEstado        Fecha del último cambio de estado.
+         * @param string $estado             Estado actual de la cita.
+         * @param string $profesor_matricula Matrícula del profesor.
+         * @param int    $asignatura_idAsignatura ID de la asignatura.
+         * @param string $alumno_matricula   Matrícula del alumno.
+         * @return mysqli_result|false       Resultado de la consulta o false en caso de error.
+         */
+        function actualizarCita($idCita, $tema, $detalles, $fechaEnvio, $fechaEstado, $estado, $profesor_matricula, $asignatura_idAsignatura, $alumno_matricula) {
             $sql = "UPDATE Cita SET tema = '$tema', detalles = '$detalles', fechaEnvio = '$fechaEnvio', fechaEstado = '$fechaEstado', estado = '$estado', 
                     ProfesorAsignatura_Profesor_matricula = '$profesor_matricula', ProfesorAsignatura_Asignatura_idAsignatura = $asignatura_idAsignatura, 
                     Alumno_matricula = '$alumno_matricula' 
-                    WHERE idCita = $idCita AND existencia=1;";
+                    WHERE idCita = $idCita AND existencia = 1;";
             $exec = mysqli_query($this->conn, $sql);
             return $exec;
         }
 
+        /**
+         * Marca una cita recibida como eliminada de manera lógica.
+         *
+         * @param int $idCita El ID de la cita.
+         * @return mysqli_result|false Resultado de la consulta o false en caso de error.
+         */
         function eliminarCitaRecibida($idCita) {
-            $sql = "UPDATE Cita SET existencia=0 WHERE idCita = $idCita;";
+            $sql = "UPDATE Cita SET existencia = 0 WHERE idCita = $idCita;";
             $exec = mysqli_query($this->conn, $sql);
             return $exec;
         }
 
-        function actualizarCitaRecibida($idCita, $tema, $detalles, $fechaEnvio, $fechaEstado, $estado, $profesor_matricula, $asignatura_idAsignatura, $nota_idNota, $alumno_matricula) {
+        /**
+         * Actualiza una cita recibida con los datos proporcionados y la fecha actual.
+         *
+         * @param int    $idCita             El ID de la cita.
+         * @param string $tema               El tema de la cita.
+         * @param string $detalles           Detalles de la cita.
+         * @param string $fechaEnvio         Fecha en que se envió la cita.
+         * @param string $estado             Estado actual de la cita.
+         * @param string $profesor_matricula Matrícula del profesor.
+         * @param int    $asignatura_idAsignatura ID de la asignatura.
+         * @param string $alumno_matricula   Matrícula del alumno.
+         * @return mysqli_result|false       Resultado de la consulta o false en caso de error.
+         */
+        function actualizarCitaRecibida($idCita, $tema, $detalles, $fechaEnvio, $estado, $profesor_matricula, $asignatura_idAsignatura, $alumno_matricula) {
             date_default_timezone_set("America/Mexico_City");
             $fecha = date("Y-m-d");
             $sql = "UPDATE Cita SET tema = '$tema', detalles = '$detalles', fechaEnvio = '$fechaEnvio', fechaEstado = '$fecha', estado = '$estado', 
                     ProfesorAsignatura_Profesor_matricula = '$profesor_matricula', ProfesorAsignatura_Asignatura_idAsignatura = $asignatura_idAsignatura, 
                     Alumno_matricula = '$alumno_matricula' 
-                    WHERE idCita = $idCita AND existencia=1;";
+                    WHERE idCita = $idCita AND existencia = 1;";
             $exec = mysqli_query($this->conn, $sql);
             return $exec;
         }
 
-         /************** Gestion Material compartido al alumno **************/
-        function consultarTodoMaterial($idCita){
-            $sql = "SELECT * FROM materialcompartido WHERE Cita_idCita=$idCita AND existencia=1;";
+
+        /************** Gestion Material compartido al alumno **************/
+         /**
+         * Consulta todos los materiales compartidos asociados a una cita específica.
+         *
+         * @param int $idCita El ID de la cita.
+         * @return mysqli_result|false Resultado de la consulta o false en caso de error.
+         */
+        function consultarTodoMaterial($idCita) {
+            $sql = "SELECT * FROM materialcompartido WHERE Cita_idCita = $idCita AND existencia = 1;";
             $exec = mysqli_query($this->conn, $sql);
             return $exec;
         }
 
-        function crearMaterialCompartido($titulo, $archivo, $comentario, $tipoMaterial, $idCita){
+        /**
+         * Crea un nuevo material compartido y lo asocia a una cita.
+         *
+         * @param string $titulo      Título del material.
+         * @param array  $archivo     Datos del archivo subido ($_FILES).
+         * @param string $comentario  Comentario asociado al material.
+         * @param int    $tipoMaterial Tipo de material (ID).
+         * @param int    $idCita      ID de la cita asociada.
+         * @return mysqli_result|false Resultado de la consulta o false en caso de error.
+         */
+        function crearMaterialCompartido($titulo, $archivo, $comentario, $tipoMaterial, $idCita) {
             $destino = $this->procesarArchivo($archivo);
-
             $sql = "INSERT INTO materialCompartido VALUES (0, '$titulo', '$destino', '$comentario', 1, '$tipoMaterial', '$idCita');";
             $exec = mysqli_query($this->conn, $sql);
-
             return $exec;
         }
 
-        function actualizarMaterialCompartido($id, $titulo, $dirArchivo, $nuevoArchivo, $comentario, $tipoMaterial){
+        /**
+         * Actualiza la información de un material compartido.
+         *
+         * @param int    $id           ID del material compartido.
+         * @param string $titulo       Título del material.
+         * @param string $dirArchivo   Ruta actual del archivo.
+         * @param array  $nuevoArchivo Nuevo archivo subido ($_FILES), si aplica.
+         * @param string $comentario   Comentario asociado al material.
+         * @param int    $tipoMaterial Tipo de material (ID).
+         * @return mysqli_result|false Resultado de la consulta o false en caso de error.
+         */
+        function actualizarMaterialCompartido($id, $titulo, $dirArchivo, $nuevoArchivo, $comentario, $tipoMaterial) {
             $flag = false;
-            if(isset($nuevoArchivo) || $nuevoArchivo !=""){
+            if (isset($nuevoArchivo) && $nuevoArchivo != "") {
+                // se subió un nuevo archivo
                 $dirArchivoAnt = $dirArchivo;
                 $dirArchivo = $this->procesarArchivo($nuevoArchivo);
                 $flag = true;
             }
 
-            $sql = "UPDATE MaterialCompartido SET titulo='$titulo', archivo='$dirArchivo', comentario='$comentario', TipoMaterial_idmaterial=$tipoMaterial WHERE idmaterialCompartido='$id' AND existencia=1;";
+            $sql = "UPDATE MaterialCompartido SET titulo = '$titulo', archivo = '$dirArchivo', comentario = '$comentario', 
+                    TipoMaterial_idmaterial = $tipoMaterial WHERE idmaterialCompartido = '$id' AND existencia = 1;";
             $exec = mysqli_query($this->conn, $sql);
 
-            if($exec == false && $flag){
-                unlink($dirArchivo);
+            if ($exec == false && $flag) {
+                unlink($dirArchivo);  // Elimina el archivo nuevo si la actualización falla.
                 return $exec;
             }
 
-            if(isset($dirArchivoAnt)){
-                unlink($dirArchivoAnt);
+            if (isset($dirArchivoAnt)) {
+                unlink($dirArchivoAnt);  // Elimina el archivo antiguo si se subió uno nuevo.
             }
 
             return $exec;
         }
 
-        function procesarArchivo($archivo){
+        /**
+         * Procesa un archivo subido y lo guarda en el servidor.
+         *
+         * @param array $archivo Datos del archivo subido ($_FILES).
+         * @return string Ruta destino donde se guardó el archivo.
+         */
+        function procesarArchivo($archivo) {
             $rutaTemp = $archivo['tmp_name'];
             $nombre = $archivo['name'];
-            $tamano = $archivo['size'];
-            $tipo = $archivo['type'];
-
-            $nuevoNombre = time().'_'.$nombre;
-
-            $destino = "Model/ArchivosEnviados/".$nuevoNombre;
+            $nuevoNombre = time() . '_' . $nombre;
+            $destino = "Model/ArchivosEnviados/" . $nuevoNombre;
 
             move_uploaded_file($rutaTemp, $destino);
             return $destino;
         }
 
-        function eliminarMaterialCompartido($idMC, $direccionArc){
-            $sql = "UPDATE materialcompartido SET existencia=0 WHERE idmaterialCompartido='$idMC';";
+        /**
+         * Marca un material compartido como eliminado de manera lógica.
+         *
+         * @param int    $idMC        ID del material compartido.
+         * @param string $direccionArc Ruta del archivo asociado.
+         * @return mysqli_result|false Resultado de la consulta o false en caso de error.
+         */
+        function eliminarMaterialCompartido($idMC, $direccionArc) {
+            $sql = "UPDATE materialcompartido SET existencia = 0 WHERE idmaterialCompartido = '$idMC';";
             $exec = mysqli_query($this->conn, $sql);
-
             return $exec;
         }
 
-        function descargarArchivo($url){
+        /**
+         * Permite descargar un archivo desde el servidor.
+         *
+         * @param string $url Ruta del archivo a descargar.
+         * @return int 1 si la descarga fue exitosa, 0 si el archivo no existe.
+         */
+        function descargarArchivo($url) {
             if (file_exists($url)) {
                 header('Content-Description: File Transfer');
                 header('Content-Type: application/octet-stream');
                 header('Content-Disposition: attachment; filename="' . basename($url) . '"');
                 header('Content-Length: ' . filesize($url));
-            
+
                 ob_clean();
                 flush();
-            
+
                 readfile($url);
-            
                 return 1;
             } else {
-                return 0;
+                return 0;  // Archivo no encontrado.
             }
         }
 
@@ -425,13 +688,6 @@
 
             return $exec;
         }
-
-        // function consultarUnaDisponibilidad($id){
-        //     $sql = "SELECT * FROM Disponibilidad WHERE idDisponibilidad='$id';";
-        //     $exec = mysqli_query($this->conn, $sql);
-
-        //     return $exec;
-        // }
 
         function crearDisponibilidad($periodo, $Lunes, $martes, $miercoles, $jueves, $viernes){
             $matricula = $_SESSION['matricula'];
@@ -546,44 +802,85 @@
         }
 
         /*************** Reportes ***************/
-        function reporteAsesAtenProfCuatrimestre($periodo, $ano){
-            if($periodo == "invierno"){
-                $query = "SELECT p.matricula, p.nombre, apellidoP, apellidoM, COUNT(p.matricula) AS 'noAsesorias' FROM Cita c, profesor p WHERE ProfesorAsignatura_Profesor_matricula=matricula AND estado='Aceptada' AND (MONTH(fechaEstado) BETWEEN 1 and 4) AND YEAR(fechaEstado)=$ano GROUP BY p.matricula;"; 
-                $resultado= mysqli_query($this->conn,$query);
-            }else if($periodo == "primavera"){
-                $query = "SELECT p.matricula, p.nombre, apellidoP, apellidoM, COUNT(p.matricula) AS 'noAsesorias' FROM Cita c, profesor p WHERE ProfesorAsignatura_Profesor_matricula=matricula AND estado='Aceptada' AND (MONTH(fechaEstado) BETWEEN 5 and 8) AND YEAR(fechaEstado)=$ano GROUP BY p.matricula;"; 
-                $resultado= mysqli_query($this->conn,$query);
-            }else{
-                $query = "SELECT p.matricula, p.nombre, apellidoP, apellidoM, COUNT(p.matricula) AS 'noAsesorias' FROM Cita c, profesor p WHERE ProfesorAsignatura_Profesor_matricula=matricula AND estado='Aceptada' AND (MONTH(fechaEstado) BETWEEN 9 and 12) AND YEAR(fechaEstado)=$ano GROUP BY p.matricula;"; 
-                $resultado= mysqli_query($this->conn,$query);
-            }
-            $pdf = new PDF('P','mm','letter');
-            $pdf->AliasNbPages();
-            $pdf->AddPage();
-            $pdf->SetFillColor(232,232,232);
-            $pdf->SetFont('Arial','B',12);
+         /**
+         * Genera un reporte en formato PDF que muestra el número de asesorías atendidas por profesores
+         * durante un cuatrimestre específico de un año determinado.
+         *
+         * @param string $periodo  El periodo cuatrimestral del año ('invierno', 'primavera', 'otoño').
+         *                         - 'invierno': de enero a abril.
+         *                         - 'primavera': de mayo a agosto.
+         *                         - 'otoño': de septiembre a diciembre.
+         * @param int    $ano      El año para el cual se generará el reporte.
+         *
+         * @return void            Genera un archivo PDF descargable con el reporte.
+         */
+        function reporteAsesAtenProfCuatrimestre($periodo, $ano) {
+        // Determinar el rango de meses según el periodo cuatrimestral.
+        if ($periodo == "invierno") {
+            $query = "SELECT p.matricula, p.nombre, apellidoP, apellidoM, COUNT(p.matricula) AS 'noAsesorias' 
+                        FROM Cita c, profesor p 
+                        WHERE ProfesorAsignatura_Profesor_matricula = matricula 
+                        AND estado = 'Aceptada' 
+                        AND (MONTH(fechaEstado) BETWEEN 1 AND 4) 
+                        AND YEAR(fechaEstado) = $ano 
+                        GROUP BY p.matricula;";
+        } else if ($periodo == "primavera") {
+            $query = "SELECT p.matricula, p.nombre, apellidoP, apellidoM, COUNT(p.matricula) AS 'noAsesorias' 
+                        FROM Cita c, profesor p 
+                        WHERE ProfesorAsignatura_Profesor_matricula = matricula 
+                        AND estado = 'Aceptada' 
+                        AND (MONTH(fechaEstado) BETWEEN 5 AND 8) 
+                        AND YEAR(fechaEstado) = $ano 
+                        GROUP BY p.matricula;";
+        } else { // 'otoño'
+            $query = "SELECT p.matricula, p.nombre, apellidoP, apellidoM, COUNT(p.matricula) AS 'noAsesorias' 
+                        FROM Cita c, profesor p 
+                        WHERE ProfesorAsignatura_Profesor_matricula = matricula 
+                        AND estado = 'Aceptada' 
+                        AND (MONTH(fechaEstado) BETWEEN 9 AND 12) 
+                        AND YEAR(fechaEstado) = $ano 
+                        GROUP BY p.matricula;";
+        }
 
-            $pdf->Cell(200, 10, 'Numero de asesorías atendidas por profesores en el periodo '.$periodo, 1, 1, 'C', true);
-            $pdf->Cell(30, 10, 'Matricula', 1, 0, 'C', true);
-            $pdf->Cell(40, 10, 'Nombre', 1, 0, 'C', true);
-            $pdf->Cell(50, 10, 'Apellido Paterno', 1, 0, 'C', true);
-            $pdf->Cell(50, 10, 'Apellido Materno', 1, 0, 'C', true);
-            $pdf->Cell(30, 10, 'No. Asesorias', 1, 1, 'C', true);     
-		   
-            $pdf->SetFont('Arial','',12);
-            while($row = mysqli_fetch_array($resultado))
-            {
-                $pdf->Cell(30, 8, $row['matricula'], 1, 0, 'C');
-                $pdf->Cell(40, 8, $row['nombre'], 1, 0, 'C');
-                $pdf->Cell(50, 8, $row['apellidoP'], 1, 0, 'C');
-                $pdf->Cell(50, 8, $row['apellidoM'], 1, 0, 'C');
-                $pdf->Cell(30, 8, $row['noAsesorias'], 1, 1, 'C');				
-            }				
-            $pdf->Output('D', 'reporteAsesAtenProfCuatrimestre.pdf');
+        // Ejecutar la consulta.
+        $resultado = mysqli_query($this->conn, $query);
+
+        // Configuración del PDF.
+        $pdf = new PDF('P', 'mm', 'letter');
+        $pdf->AliasNbPages();
+        $pdf->AddPage();
+        $pdf->SetFillColor(232, 232, 232);
+        $pdf->SetFont('Arial', 'B', 12);
+
+        // Encabezado del reporte.
+        $pdf->Cell(200, 10, 'Numero de asesorías atendidas por profesores en el periodo ' . $periodo, 1, 1, 'C', true);
+        $pdf->Cell(30, 10, 'Matricula', 1, 0, 'C', true);
+        $pdf->Cell(40, 10, 'Nombre', 1, 0, 'C', true);
+        $pdf->Cell(50, 10, 'Apellido Paterno', 1, 0, 'C', true);
+        $pdf->Cell(50, 10, 'Apellido Materno', 1, 0, 'C', true);
+        $pdf->Cell(30, 10, 'No. Asesorias', 1, 1, 'C', true);
+
+        // Datos del reporte.
+        $pdf->SetFont('Arial', '', 12);
+        while ($row = mysqli_fetch_array($resultado)) {
+            $pdf->Cell(30, 8, $row['matricula'], 1, 0, 'C');
+            $pdf->Cell(40, 8, $row['nombre'], 1, 0, 'C');
+            $pdf->Cell(50, 8, $row['apellidoP'], 1, 0, 'C');
+            $pdf->Cell(50, 8, $row['apellidoM'], 1, 0, 'C');
+            $pdf->Cell(30, 8, $row['noAsesorias'], 1, 1, 'C');
+        }
+
+        // Generar el archivo PDF y enviarlo como descarga.
+        $pdf->Output('D', 'reporteAsesAtenProfCuatrimestre.pdf');
         }
 
         function reporteSoliAsesAlumMes($mes, $ano){
-            $query = "SELECT a.matricula, nombre, apellidoP, apellidoM, COUNT(a.matricula) AS 'noAsesorias' FROM Cita c, Alumno a WHERE Alumno_matricula=a.matricula AND MONTH(fechaEnvio)=$mes AND YEAR(fechaEnvio)=$ano GROUP BY a.matricula;"; 
+            $query = "SELECT a.matricula, nombre, apellidoP, apellidoM, COUNT(a.matricula) AS 'noAsesorias' 
+                      FROM Cita c, Alumno a 
+                      WHERE Alumno_matricula=a.matricula 
+                      AND MONTH(fechaEnvio)=$mes 
+                      AND YEAR(fechaEnvio)=$ano 
+                      GROUP BY a.matricula;"; 
             $resultado= mysqli_query($this->conn,$query);
             
             $pdf = new PDF('P','mm','letter');
@@ -614,13 +911,28 @@
         function reporteAlumAtenMesCuatrimestre($periodo, $ano){
             $matricula = $_SESSION['matricula'];
             if($periodo == "invierno"){
-                $query = "SELECT MONTHNAME(fechaEstado) AS 'mes', COUNT(MONTHNAME(fechaEstado)) as 'noAsesorias' FROM Cita WHERE (MONTH(fechaEstado) BETWEEN 1 and 4) AND YEAR(fechaEstado)=$ano AND ProfesorAsignatura_Profesor_matricula='$matricula' GROUP BY MONTHNAME(fechaEstado);"; 
+                $query = "SELECT MONTHNAME(fechaEstado) AS 'mes', COUNT(MONTHNAME(fechaEstado)) as 'noAsesorias' 
+                          FROM Cita 
+                          WHERE (MONTH(fechaEstado) BETWEEN 1 and 4) 
+                          AND YEAR(fechaEstado)=$ano 
+                          AND ProfesorAsignatura_Profesor_matricula='$matricula' 
+                          GROUP BY MONTHNAME(fechaEstado);"; 
                 $resultado= mysqli_query($this->conn,$query);
             }else if($periodo == "primavera"){
-                $query = "SELECT MONTHNAME(fechaEstado) AS 'mes', COUNT(MONTHNAME(fechaEstado)) as 'noAsesorias' FROM Cita WHERE (MONTH(fechaEstado) BETWEEN 5 and 8) AND YEAR(fechaEstado)=$ano AND ProfesorAsignatura_Profesor_matricula='$matricula' GROUP BY MONTHNAME(fechaEstado);"; 
+                $query = "SELECT MONTHNAME(fechaEstado) AS 'mes', COUNT(MONTHNAME(fechaEstado)) as 'noAsesorias' 
+                          FROM Cita 
+                          WHERE (MONTH(fechaEstado) BETWEEN 5 and 8) 
+                          AND YEAR(fechaEstado)=$ano 
+                          AND ProfesorAsignatura_Profesor_matricula='$matricula' 
+                          GROUP BY MONTHNAME(fechaEstado);"; 
                 $resultado= mysqli_query($this->conn,$query);
             }else{
-                $query = "SELECT MONTHNAME(fechaEstado) AS 'mes', COUNT(MONTHNAME(fechaEstado)) as 'noAsesorias' FROM Cita WHERE (MONTH(fechaEstado) BETWEEN 9 and 12) AND YEAR(fechaEstado)=$ano AND ProfesorAsignatura_Profesor_matricula='$matricula' GROUP BY MONTHNAME(fechaEstado);"; 
+                $query = "SELECT MONTHNAME(fechaEstado) AS 'mes', COUNT(MONTHNAME(fechaEstado)) as 'noAsesorias' 
+                          FROM Cita 
+                          WHERE (MONTH(fechaEstado) BETWEEN 9 and 12) 
+                          AND YEAR(fechaEstado)=$ano 
+                          AND ProfesorAsignatura_Profesor_matricula='$matricula' 
+                          GROUP BY MONTHNAME(fechaEstado);"; 
                 $resultado= mysqli_query($this->conn,$query);
             }
 
@@ -653,11 +965,32 @@
         function reporteAAPC($periodo, $ano) {
             $matricula = $_SESSION['matricula'];
             if ($periodo == "Septiembre-Diciembre") {
-                $query = "SELECT a.idAsignatura, a.nombre, a.siglas, a.descripcion, COUNT(c.ProfesorAsignatura_Asignatura_idAsignatura) AS 'noAsesorias' FROM Cita c, asignatura a WHERE c.estado = 'Aceptada' AND MONTH(c.fechaEstado) BETWEEN 9 AND 12 AND YEAR(c.fechaEstado) = $ano AND c.ProfesorAsignatura_Profesor_matricula = '$matricula' AND c.ProfesorAsignatura_Asignatura_idAsignatura = a.idAsignatura GROUP BY a.idAsignatura, a.nombre, a.siglas, a.descripcion;";
+                $query = "SELECT a.idAsignatura, a.nombre, a.siglas, a.descripcion, COUNT(c.ProfesorAsignatura_Asignatura_idAsignatura) AS 'noAsesorias' 
+                          FROM Cita c, asignatura a 
+                          WHERE c.estado = 'Aceptada' 
+                          AND MONTH(c.fechaEstado) BETWEEN 9 AND 12
+                          AND YEAR(c.fechaEstado) = $ano
+                          AND c.ProfesorAsignatura_Profesor_matricula = '$matricula'
+                          AND c.ProfesorAsignatura_Asignatura_idAsignatura = a.idAsignatura
+                          GROUP BY a.idAsignatura, a.nombre, a.siglas, a.descripcion;";
             } else if ($periodo == "Enero-Abril") {
-                $query = "SELECT a.idAsignatura, a.nombre, a.siglas, a.descripcion, COUNT(c.ProfesorAsignatura_Asignatura_idAsignatura) AS 'noAsesorias' FROM Cita c, asignatura a WHERE c.estado = 'Aceptada' AND MONTH(c.fechaEstado) BETWEEN 1 AND 4 AND YEAR(c.fechaEstado) = $ano AND c.ProfesorAsignatura_Profesor_matricula = '$matricula' AND c.ProfesorAsignatura_Asignatura_idAsignatura = a.idAsignatura GROUP BY a.idAsignatura, a.nombre, a.siglas, a.descripcion;";
+                $query = "SELECT a.idAsignatura, a.nombre, a.siglas, a.descripcion, COUNT(c.ProfesorAsignatura_Asignatura_idAsignatura) AS 'noAsesorias' 
+                          FROM Cita c, asignatura a 
+                          WHERE c.estado = 'Aceptada' 
+                          AND MONTH(c.fechaEstado) BETWEEN 1 AND 4 
+                          AND YEAR(c.fechaEstado) = $ano 
+                          AND c.ProfesorAsignatura_Profesor_matricula = '$matricula' 
+                          AND c.ProfesorAsignatura_Asignatura_idAsignatura = a.idAsignatura 
+                          GROUP BY a.idAsignatura, a.nombre, a.siglas, a.descripcion;";
             } else {
-                $query = "SELECT a.idAsignatura, a.nombre, a.siglas, a.descripcion, COUNT(c.ProfesorAsignatura_Asignatura_idAsignatura) AS 'noAsesorias' FROM Cita c, asignatura a WHERE c.estado = 'Aceptada' AND MONTH(c.fechaEstado) BETWEEN 5 AND 8 AND YEAR(c.fechaEstado) = $ano AND c.ProfesorAsignatura_Profesor_matricula = '$matricula' AND c.ProfesorAsignatura_Asignatura_idAsignatura = a.idAsignatura GROUP BY a.idAsignatura, a.nombre, a.siglas, a.descripcion;";
+                $query = "SELECT a.idAsignatura, a.nombre, a.siglas, a.descripcion, COUNT(c.ProfesorAsignatura_Asignatura_idAsignatura) AS 'noAsesorias' 
+                          FROM Cita c, asignatura a 
+                          WHERE c.estado = 'Aceptada' 
+                          AND MONTH(c.fechaEstado) BETWEEN 5 AND 8 
+                          AND YEAR(c.fechaEstado) = $ano 
+                          AND c.ProfesorAsignatura_Profesor_matricula = '$matricula' 
+                          AND c.ProfesorAsignatura_Asignatura_idAsignatura = a.idAsignatura 
+                          GROUP BY a.idAsignatura, a.nombre, a.siglas, a.descripcion;";
             }
             
             $resultado = mysqli_query($this->conn, $query);
@@ -690,13 +1023,31 @@
         function reporteCCPC($periodo, $ano){
             $matricula=$_SESSION['matricula'];
             if($periodo == "Septiembre-Diciembre"){
-                $query = "SELECT p.matricula, p.nombre, apellidoP, apellidoM, COUNT(Alumno_matricula) AS 'noAsesorias' FROM Cita c, profesor p WHERE ProfesorAsignatura_Profesor_matricula=matricula AND (MONTH(fechaEnvio) BETWEEN 9 and 12) AND YEAR(fechaEnvio)=$ano AND Alumno_matricula='$matricula' GROUP BY Alumno_matricula;"; 
+                $query = "SELECT p.matricula, p.nombre, apellidoP, apellidoM, COUNT(Alumno_matricula) AS 'noAsesorias' 
+                          FROM Cita c, profesor p 
+                          WHERE ProfesorAsignatura_Profesor_matricula=matricula 
+                          AND (MONTH(fechaEnvio) BETWEEN 9 and 12)
+                          AND YEAR(fechaEnvio)=$ano
+                          AND Alumno_matricula='$matricula'
+                          GROUP BY Alumno_matricula;"; 
                 $resultado= mysqli_query($this->conn,$query);
             }else if($periodo == "Enero-Abril"){
-                $query = "SELECT p.matricula, p.nombre, apellidoP, apellidoM, COUNT(Alumno_matricula) AS 'noAsesorias' FROM Cita c, profesor p WHERE ProfesorAsignatura_Profesor_matricula=matricula AND (MONTH(fechaEnvio) BETWEEN 1 and 4) AND YEAR(fechaEnvio)=$ano AND Alumno_matricula='$matricula' GROUP BY Alumno_matricula;"; 
+                $query = "SELECT p.matricula, p.nombre, apellidoP, apellidoM, COUNT(Alumno_matricula) AS 'noAsesorias' 
+                          FROM Cita c, profesor p 
+                          WHERE ProfesorAsignatura_Profesor_matricula=matricula 
+                          AND (MONTH(fechaEnvio) BETWEEN 1 and 4) 
+                          AND YEAR(fechaEnvio)=$ano 
+                          AND Alumno_matricula='$matricula' 
+                          GROUP BY Alumno_matricula;"; 
                 $resultado= mysqli_query($this->conn,$query);
             }else{
-                $query = "SELECT p.matricula, p.nombre, apellidoP, apellidoM, COUNT(Alumno_matricula) AS 'noAsesorias' FROM Cita c, profesor p WHERE ProfesorAsignatura_Profesor_matricula=matricula AND (MONTH(fechaEnvio) BETWEEN 5 and 8) AND YEAR(fechaEnvio)=$ano AND Alumno_matricula='$matricula' GROUP BY Alumno_matricula;"; 
+                $query = "SELECT p.matricula, p.nombre, apellidoP, apellidoM, COUNT(Alumno_matricula) AS 'noAsesorias' 
+                          FROM Cita c, profesor p 
+                          WHERE ProfesorAsignatura_Profesor_matricula=matricula 
+                          AND (MONTH(fechaEnvio) BETWEEN 5 and 8) 
+                          AND YEAR(fechaEnvio)=$ano 
+                          AND Alumno_matricula='$matricula' 
+                          GROUP BY Alumno_matricula;"; 
                 $resultado= mysqli_query($this->conn,$query);
             }
             $pdf = new PDF('P','mm','letter');
