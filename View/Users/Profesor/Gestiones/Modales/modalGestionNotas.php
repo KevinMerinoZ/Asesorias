@@ -23,6 +23,7 @@
                         <input type="text" form="frm-crear-nota<?= $rows['idCita'] ?>" name="cuerpo" id="cuerpo" placeholder="Cuerpo" required>
                     </label>
                 </div>
+                <input type="hidden">
                 <br>
                 <div>
                     <label for="horaInicio">
@@ -34,11 +35,10 @@
                 <div>
                     <label for="horaFin">
                         Hora de finalización: <br>
-                        <input type="text" form="frm-crear-nota<?= $rows['idCita'] ?>" name="horaFin" id="horaFin" placeholder="Hora de finzalizacion" >
+                        <input type="text" form="frm-crear-nota<?= $rows['idCita'] ?>" name="horaFin" id="horaFin" placeholder="Hora de finzalizacion" required>
                     </label>
                 </div>
                 <br>
-                <input type="hidden">
                 <div>
                     <label for="calificacionP1">
                         Calificación del Parcial 1: <br>

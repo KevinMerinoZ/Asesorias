@@ -354,11 +354,47 @@ function crearDirectivo(idForm) {
  * @param {string} opcion - La opción que define si se va a crear o actualizar una nota.
  */
 async function enviarNotas(idForm, opcion) {
+    var expreHora = /^(0[7-9]|1[0-9]|2[0]):([0-5][0-9])(:[0-5][0-9])?$/;
     // Obtener el formulario usando el ID proporcionado.
     const formulario = document.getElementById(idForm);
-    if (!formulario) {
-        console.log(formulario);
-        return;
+    const inputHI = formulario.querySelector('[name="horaInicio"]');
+    const inputHF = formulario.querySelector('[name="horaFin"]');
+
+    let horaCI = inputHI.value.replace(/\s+/g, "");
+    let horaCF = inputHF.value.replace(/\s+/g, "");
+
+    // Verificar si el formato de la hora es válido utilizando la expresión regular.
+    if (!expreHora.test(horaCI)) {
+        alert("Ingrese una hora Correcta");
+        inputHI.focus();
+        return ;
+    }
+    if (!expreHora.test(horaCF)) {
+        alert("Ingrese una hora Correcta");
+        inputHF.focus();
+        return ;
+    }
+
+    // Dividir la hora en partes: hora y minutos de inicio y fin.
+    let horaI = horaCI.slice(0, 2);
+    let minI = horaCI.slice(3);
+    let horaF = horaCF.slice(0, 2);
+    let minF = horaCF.slice(3);
+
+    // Verificar si la hora de inicio es mayor que la hora de fin.
+    if (horaI > horaF) {
+        alert("Ingrese un rango de horas correcto");
+        inputHF.focus();
+        return ;
+    }
+
+    // Verificar si las horas son iguales, en ese caso los minutos de inicio no deben ser mayores que los minutos de fin.
+    if (horaI == horaF) {
+        if (minI > minF) {
+            alert("Ingrese un rango de horas correcto");
+            inputHF.focus();
+            return ;
+        }
     }
 
     // Crear un objeto FormData con los datos del formulario.
@@ -385,7 +421,17 @@ async function enviarNotas(idForm, opcion) {
 
             // Obtener la respuesta del servidor en formato texto.
             const respuesta = await response.text();
-            console.log(respuesta);
+            if(respuesta == 0){
+                alert("Ya existe una nota para esta cita");
+            }else if(respuesta == 1){
+                alert("Se registró la nota correctamente");
+            }else if(respuesta == 2){
+                alert("Se actualizó la nota correctamente");
+            }else if(respuesta == 3){
+                alert("Se eliminó la nota correctamente");
+            }else{
+                alert("hubo algún error");
+            }
 
         } catch (error) {
             console.error('Error al obtener respuesta:', error);
@@ -543,4 +589,16 @@ function verificarEdicionCita(event, estado) {
         alert("Una vez aceptada o rechazada la cita ya no se puede editar");
     }
 }
+
+function validarTamanoArc(idForm, event){
+    const form = document.getElementById(idForm);
+    const inputFile = form.querySelector('input[type="file"]');
+    const file = inputFile.files[0];
+
+    if (file && file.size > (35*1024*1024)) {
+        alert('El archivo es demasiado grande. El tamaño máximo permitido es 35 MB.');
+        event.preventDefault(); // Cancela el envío del formulario
+      }
+}
+
 

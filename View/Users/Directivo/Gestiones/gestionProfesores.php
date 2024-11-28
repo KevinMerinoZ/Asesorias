@@ -71,7 +71,15 @@ if(isset($_SESSION['tipoUsuario'])){
                                         <?php require("View/Users/Directivo/Gestiones/Modales/modalProfAsig.php") ?>
                                     </td>
                                     
-                                    <td> <input type="text" name="nivelEducativo" value=<?= $rows['nivelEducativo'] ?> required> </td>
+                                    <td> 
+                                        <select name="nivelEducativo" id="nivelEducativo" >
+                                            <option value="Tecnico Superior Universitario" <?= $rows['nivelEducativo'] == 'Tecnico Superior Universitario' ? 'selected' : ''?>>Técnico Superior Universitario</option>
+                                            <option value="Licenciatura" <?= $rows['nivelEducativo'] == 'Licenciatura' ? 'selected' : ''?>>Licenciatura</option>
+                                            <option value="Especialidad" <?= $rows['nivelEducativo'] == 'Especialidad' ? 'selected' : ''?>>Especialidad</option>
+                                            <option value="Maestria" <?= $rows['nivelEducativo'] == 'Maestria' ? 'selected' : ''?>>Maestría</option>
+                                            <option value="Doctorado" <?= $rows['nivelEducativo'] == 'Doctorado' ? 'selected' : ''?>>Doctorado</option>
+                                        </select>
+                                    </td>
                                     <td> <input type="text" name="especialidad" value="<?= $rows['especialidad'] ?>" required> </td>
                                     <td> <input type="text" name="estudiantesAtendidos" value=<?= $rows['estudiantesAtendidos'] ?> required> </td>
                                     <td> 

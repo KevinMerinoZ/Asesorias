@@ -25,7 +25,7 @@
                 <div>
                     <label for="archivo">
                         Archivo: <br>
-                        <input type="file" name="archivo" id="archivo" value="Agregar" required>
+                        <input type="file" name="archivo" id="archivo" required>
                     </label>
                 </div>
                 <br>
@@ -39,7 +39,22 @@
                 <div>
                     <label for="tipoMaterial">
                         Tipo de material: <br>
-                        <input type="text" name="tipoMaterial" id="tipoMaterial" placeholder="" class="datos" required>
+                        <div>
+                            <select name="tipoMaterial" required>
+                                <?php 
+                                if($tipoMaterial != false){
+                                    mysqli_data_seek($tipoMaterial, 0);
+                                    while($tipoM = mysqli_fetch_array($tipoMaterial)){ ?>
+
+                                    <option value=<?= $tipoM['idmaterial'] ?>><?= $tipoM['categoria'] ?></option>
+
+                                <?php
+                                    }
+                                }else{    ?>
+                                    No se encontraron el tipo de material
+                                <?php }   ?>
+                            </select>
+                        </div>
                     </label>
                 </div>
 
@@ -47,7 +62,7 @@
 
         </div>
         <div class="modal-footer modal-pie">
-            <button type="submit" class="boton-secundario" form="frm-crearMaterialCompartido" name="opc" value="crearMaterialCompartido">Registrar</button>
+            <button type="submit" class="boton-secundario" form="frm-crearMaterialCompartido" name="opc" value="crearMaterialCompartido" onclick="validarTamanoArc('frm-crearMaterialCompartido', event)">Registrar</button>
         </div>
         </div>
     </div>

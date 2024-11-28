@@ -2,6 +2,9 @@
     
     require_once("conexion/DB.php");
     require_once("Model/plantilla.php");
+    require_once "vendor/autoload.php";
+    use PhpOffice\PhpSpreadsheet\Spreadsheet;
+    use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
     class Modelo{
         private $conn;
 
@@ -586,7 +589,13 @@
          * @return mysqli_result|false Resultado de la consulta o false en caso de error.
          */
         function crearMaterialCompartido($titulo, $archivo, $comentario, $tipoMaterial, $idCita) {
-            $destino = $this->procesarArchivo($archivo);
+            $tipoM = $this->consultarUnTipoMaterial($tipoMaterial);
+            $categoriaMaterial = mysqli_fetch_assoc($tipoM);
+
+            $destino = $this->procesarArchivo($archivo, $categoriaMaterial['categoria']);
+            if($destino === false){
+                return false;
+            }
             $sql = "INSERT INTO materialCompartido VALUES (0, '$titulo', '$destino', '$comentario', 1, '$tipoMaterial', '$idCita');";
             $exec = mysqli_query($this->conn, $sql);
             return $exec;
@@ -604,44 +613,79 @@
          * @return mysqli_result|false Resultado de la consulta o false en caso de error.
          */
         function actualizarMaterialCompartido($id, $titulo, $dirArchivo, $nuevoArchivo, $comentario, $tipoMaterial) {
+            $matricula = $_SESSION['matricula'];
+
+            $tipoM = $this->consultarUnTipoMaterial($tipoMaterial);
+            $resCM = mysqli_fetch_assoc($tipoM);
+            $categoriaMaterial = $resCM['categoria'];
+
             $flag = false;
             if (isset($nuevoArchivo) && $nuevoArchivo != "") {
                 // se subió un nuevo archivo
                 $dirArchivoAnt = $dirArchivo;
-                $dirArchivo = $this->procesarArchivo($nuevoArchivo);
+                $dirArchivo = $this->procesarArchivo($nuevoArchivo, $categoriaMaterial);
+                if($dirArchivo === false){
+                    return false;
+                }
                 $flag = true;
             }
 
-            $sql = "UPDATE MaterialCompartido SET titulo = '$titulo', archivo = '$dirArchivo', comentario = '$comentario', 
-                    TipoMaterial_idmaterial = $tipoMaterial WHERE idmaterialCompartido = '$id' AND existencia = 1;";
+            $ext = pathinfo($dirArchivo, PATHINFO_EXTENSION);
+
+            $sql = "SELECT * FROM tipomaterial WHERE categoria='$categoriaMaterial' AND Profesor_matricula='$matricula' AND existencia=1;";
             $exec = mysqli_query($this->conn, $sql);
 
-            if ($exec == false && $flag) {
-                unlink($dirArchivo);  // Elimina el archivo nuevo si la actualización falla.
-                return $exec;
+            while($row = mysqli_fetch_assoc($exec)){
+                if($row['extension'] === $ext){                
+                    $sql = "UPDATE MaterialCompartido SET titulo = '$titulo', archivo = '$dirArchivo', comentario = '$comentario', 
+                    TipoMaterial_idmaterial = $tipoMaterial WHERE idmaterialCompartido = '$id' AND existencia = 1;";
+                    $exec = mysqli_query($this->conn, $sql);
+
+                    if ($exec == false && $flag) {
+                        unlink($dirArchivo);  // Elimina el archivo nuevo si la actualización falla.
+                        return $exec;
+                    }
+
+                    if (isset($dirArchivoAnt)) {
+                        unlink($dirArchivoAnt);  // Elimina el archivo antiguo si se subió uno nuevo.
+                    }
+
+                    return $exec;
+                }
             }
 
-            if (isset($dirArchivoAnt)) {
-                unlink($dirArchivoAnt);  // Elimina el archivo antiguo si se subió uno nuevo.
-            }
+            return false;
 
-            return $exec;
         }
 
         /**
          * Procesa un archivo subido y lo guarda en el servidor.
          *
          * @param array $archivo Datos del archivo subido ($_FILES).
-         * @return string Ruta destino donde se guardó el archivo.
+         * @return string|false Ruta destino donde se guardó el archivo o false en caso de que no coincidiera el tipo de material con la categoría o exeda el tamaño permitido.
          */
-        function procesarArchivo($archivo) {
+        function procesarArchivo($archivo, $categoriaMaterial) {
+            $matricula = $_SESSION['matricula'];
+
             $rutaTemp = $archivo['tmp_name'];
             $nombre = $archivo['name'];
+            $tipoArc = $archivo['type'];
             $nuevoNombre = time() . '_' . $nombre;
             $destino = "Model/ArchivosEnviados/" . $nuevoNombre;
 
-            move_uploaded_file($rutaTemp, $destino);
-            return $destino;
+            $ext = pathinfo($nombre, PATHINFO_EXTENSION);
+
+            $sql = "SELECT * FROM tipomaterial WHERE categoria='$categoriaMaterial' AND Profesor_matricula='$matricula' AND existencia=1;";
+            $exec = mysqli_query($this->conn, $sql);
+
+            while($row = mysqli_fetch_assoc($exec)){
+                if($row['extension'] === $ext){
+                    move_uploaded_file($rutaTemp, $destino);
+                    return $destino;
+                }
+            }
+            return false;
+            
         }
 
         /**
@@ -652,8 +696,11 @@
          * @return mysqli_result|false Resultado de la consulta o false en caso de error.
          */
         function eliminarMaterialCompartido($idMC, $direccionArc) {
-            $sql = "UPDATE materialcompartido SET existencia = 0 WHERE idmaterialCompartido = '$idMC';";
+            $sql = "DELETE FROM materialcompartido WHERE idmaterialCompartido = '$idMC';";
             $exec = mysqli_query($this->conn, $sql);
+
+            unlink($direccionArc);
+
             return $exec;
         }
 
@@ -729,6 +776,20 @@
             return $exec;
         }
 
+        function consultarUnTipoMaterial($idMaterial){
+            $matricula=$_SESSION['matricula'];
+            $sql = "SELECT * FROM tipomaterial WHERE Profesor_matricula='$matricula' AND idmaterial=$idMaterial AND existencia=1;";
+            $exec = mysqli_query($this->conn, $sql);
+            return $exec;
+        }
+
+        function consultarTodoTipoMaterialPorCat() {
+            $matricula = $_SESSION['matricula'];
+            $sql = "SELECT * FROM tipomaterial WHERE Profesor_matricula='$matricula' AND existencia=1 GROUP BY categoria;";
+            $exec = mysqli_query($this->conn, $sql);
+            return $exec;
+        }
+
         function crearTipoMaterial($extension,$descripcion,$categoria) {
             $matricula=$_SESSION['matricula'];
             $sql = "INSERT INTO tipomaterial (extension,descripcion,categoria,Profesor_matricula) VALUES ('$extension',  '$descripcion','$categoria','$matricula');";
@@ -772,13 +833,18 @@
         }
 
         function crearNota($idCita, $titulo, $cuerpo, $fechaCreacion, $horaInicio, $horaFin, $calificacionP1,$calificacionP2) {
-            $sql = "INSERT INTO Nota (titulo, cuerpo, fechaCreacion, horaInicio, horaFin, calificacionP1, calificacionP2, existencia) 
-                    VALUES ('$titulo', '$cuerpo', '$fechaCreacion', '$horaInicio', '$horaFin', $calificacionP1, $calificacionP2, 1);";
-            $exec = mysqli_query($this->conn, $sql);
+            $consultaNota = $this->consultarUnaNota($idCita);
+            if($consultaNota == 0){
+                $sql = "INSERT INTO Nota (titulo, cuerpo, fechaCreacion, horaInicio, horaFin, calificacionP1, calificacionP2, existencia) 
+                        VALUES ('$titulo', '$cuerpo', '$fechaCreacion', '$horaInicio', '$horaFin', $calificacionP1, $calificacionP2, 1);";
+                $exec = mysqli_query($this->conn, $sql);
 
-            $sql = "UPDATE Cita SET Nota_idNota=(SELECT idNota FROM Nota ORDER BY idNota DESC LIMIT 1) WHERE idCita=$idCita AND existencia=1;";
-            $exec = mysqli_query($this->conn, $sql);
-            return "1";
+                $sql = "UPDATE Cita SET Nota_idNota=(SELECT idNota FROM Nota ORDER BY idNota DESC LIMIT 1) WHERE idCita=$idCita AND existencia=1;";
+                $exec = mysqli_query($this->conn, $sql);
+                return 1;
+            }
+
+            return 0;
         }
 
         function actualizarNota($idNota, $titulo, $cuerpo, $fechaCreacion, $horaInicio, $horaFin, $calificacionP1, $calificacionP2) {
@@ -786,7 +852,7 @@
 
             $exec = mysqli_query($this->conn, $sql);
 
-            return "1";
+            return 2;
         }
 
         function eliminarNota($idNota, $idCita){
@@ -797,7 +863,7 @@
             $sql = "DELETE FROM Nota WHERE idNota=$idNota;";
             $exec = mysqli_query($this->conn, $sql);
 
-            return 1;
+            return 3;
             
         }
 
@@ -1073,6 +1139,19 @@
                 $pdf->Cell(30, 8, $row['noAsesorias'], 1, 1, 'C');				
             }				
             $pdf->Output('D', 'reporteCCPC.pdf');
+        }
+
+        /*************** Reportes ***************/
+        function consultarUnFormato(){
+            $matricula = $_SESSION['matricula'];
+            $sql = "SELECT * FROM Formato WHERE Profesor_matricula='$matricula' AND existencia=1;";
+            $exec = mysqli_query($this->conn, $sql);
+
+            return $exec;
+        }
+
+        function crearFormato(){
+            
         }
     }
 

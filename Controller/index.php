@@ -93,7 +93,7 @@ class Controlador{
         if($result == null){
             $result = $this->modelo->consultarTodoMaterial($idCita);
         }
-        $tipoMaterial = $this->modelo->consultarTodoTipoMaterial();
+        $tipoMaterial = $this->modelo->consultarTodoTipoMaterialPorCat();
         $vistaAnt = "vistaGestionCitasRecibidas";
         require_once("View/Users/Profesor/Gestiones/gestionMaterialCompartido.php");
         $_SESSION['vistaActual'] = "vistaGestionMaterialCompartido";
@@ -576,7 +576,6 @@ class Controlador{
         }
         $comentario = $_POST['comentario'];
         $tipoMaterial = $_POST['tipoMaterial'];
-        // $idCita = $_POST['idCita'];
         
         $result = $this->modelo->actualizarMaterialCompartido($id, $titulo, $dirArchivo, $nuevoArchivo, $comentario, $tipoMaterial);
 
@@ -622,7 +621,7 @@ class Controlador{
             $calificacionP2 = $_POST['calificacionP2'];
         }
 
-        $result = $this->modelo->crearNota($idNota, $titulo,$cuerpo,$fechaCreacion,$horaInicio,$horaFin,$calificacionP1,$calificacionP2);
+        $result = $this->modelo->actualizarNota($idNota, $titulo,$cuerpo,$fechaCreacion,$horaInicio,$horaFin,$calificacionP1,$calificacionP2);
         echo $result;
     }
 

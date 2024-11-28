@@ -64,12 +64,6 @@
                         <input type="text" name="noProfesores" id="noProfesores" placeholder="" required>
                     </label>
                 </div>
-                <div>
-                    <label for="oficina">
-                        Oficina: <br>
-                        <input type="text" name="oficina" id="oficina" placeholder="" required>
-                    </label>
-                </div>
 
             </form>
 

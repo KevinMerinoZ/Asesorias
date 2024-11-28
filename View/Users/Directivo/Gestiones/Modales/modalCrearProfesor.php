@@ -88,7 +88,14 @@
                 <div>
                     <label for="nivelEducativo">
                         Nivel Educativo: <br>
-                        <input type="text" name="nivelEducativo" id="nivelEducativo" placeholder="" required>
+                        <select name="nivelEducativo" id="nivelEducativo" required>
+                            <option value="">Seleccione nivel educativo</option>
+                            <option value="Tecnico Superior Universitario">Técnico Superior Universitario</option>
+                            <option value="Licenciatura">Licenciatura</option>
+                            <option value="Especialidad">Especialidad</option>
+                            <option value="Maestria">Maestría</option>
+                            <option value="Doctorado">Doctorado</option>
+                        </select>
                     </label>
                 </div>
                 <div>

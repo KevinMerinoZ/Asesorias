@@ -34,7 +34,6 @@ if(isset($_SESSION['tipoUsuario'])){
                                     <th scope="col"> Genero </th>
                                     <th scope="col"> Departamento </th>
                                     <th scope="col" class="celda-corta"> No. profesores </th>
-                                    <th scope="col"> Oficina </th>
                                     <th scope="col"> Gestion </th>
                                 </tr>
                             </thead>
@@ -64,7 +63,6 @@ if(isset($_SESSION['tipoUsuario'])){
                                         </td>
                                         <td> <input type="text" name="departamento" value=<?= $rows['departamento'] ?> required> </td>
                                         <td> <input type="text" name="noProfesores" value=<?= $rows['noProfesores'] ?> required> </td>
-                                        <td> <input type="text" name="oficina" value=<?= $rows['oficina'] ?> required> </td>
                                         <td> 
                                             <div class="columna-acciones">
                                                 <button form="frm-gestionDirectivo-<?= $rows['matricula'] ?>" class="boton-icono" type="submit" name="opc" value="actualizarDirectivo">
