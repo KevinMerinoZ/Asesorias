@@ -46,11 +46,11 @@ if(isset($_SESSION['tipoUsuario'])){
                                 <form name="frm-gestionAlumno-<?= $rows['matricula'] ?>" id="frm-gestionAlumno-<?= $rows['matricula'] ?>" action="" method="POST" onsubmit="return confirmacionAccion()">
                                     <tr>
                                         
-                                        <td> <?= $rows['matricula'] ?> <input type="hidden" name="matricula" value=<?= $rows['matricula'] ?>> </td>
-                                        <td> <input type="text" name="contrasenia" value=<?= $rows['contrasenia'] ?> required> </td>
-                                        <td> <input type="text" name="nombre" value=<?= $rows['nombre'] ?> required> </td>
-                                        <td> <input type="text" name="apellidoP" value=<?= $rows['apellidoP'] ?> required> </td>
-                                        <td> <input type="text" name="apellidoM" value=<?= $rows['apellidoM'] ?> required> </td>
+                                        <td> <?= $rows['matricula'] ?> <input type="hidden" name="matricula" value="<?= $rows['matricula'] ?>"> </td>
+                                        <td> <input type="text" name="contrasenia" value="<?= $rows['contrasenia'] ?>" required> </td>
+                                        <td> <input type="text" name="nombre" value="<?= $rows['nombre'] ?>" required> </td>
+                                        <td> <input type="text" name="apellidoP" value="<?= $rows['apellidoP'] ?>" required> </td>
+                                        <td> <input type="text" name="apellidoM" value="<?= $rows['apellidoM'] ?>" required> </td>
                                         <td>
                                             <select name="genero">
                                                 <?php if($rows['genero'] === "Masculino"){ ?>
@@ -62,7 +62,7 @@ if(isset($_SESSION['tipoUsuario'])){
                                                 <?php } ?>
                                             </select> 
                                         </td>
-                                        <td> <input type="text" name="carrera" value=<?= $rows['carrera'] ?> required> </td>
+                                        <td> <input type="text" name="carrera" value="<?= $rows['carrera'] ?>" required> </td>
                                         <td> <input type="text" name="grado" value=<?= $rows['grado'] ?> required> </td>
                                         <td> <input type="text" name="grupo" value=<?= $rows['grupo'] ?> required> </td>
                                         <td> 
