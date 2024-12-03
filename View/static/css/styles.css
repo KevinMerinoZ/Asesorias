@@ -1,0 +1,326 @@
+
+/****************** Generales ******************/
+.contenedor-accion-cuerpo{
+    margin: 1rem;
+}
+
+section{
+    margin-bottom: 6rem;
+}
+
+/*----------------- modales -----------------*/
+.modal-encabezado{
+    background-color: #ffa500;
+    color: #652786;
+}
+
+.modal-cuerpo, .modal-pie{
+    background-color: #e9e3e3;
+}
+
+.modal-cuerpo p{
+    color: #652786;
+}
+
+.modal-cuerpo label{
+    color: #652786;
+}
+
+/*----------------- tablas -----------------*/
+.contenedor-tabla{
+    width: 100%;
+    overflow: auto;
+}
+
+.tabla {
+    table-layout: fixed;
+    color: #ffa500;
+}
+
+.tabla td, th{
+    width: 150px;
+}
+
+.tabla th{
+    background-color: #652786;
+    color: #ffa500;
+    vertical-align: middle;
+}
+
+.tabla input, select{
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: 0px;
+}
+
+.celda-corta{
+    width: 60px;
+}
+
+.celda-larga{
+    width: 250px;
+}
+
+.columna-acciones{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+/*----------------- Botones -----------------*/
+.boton-primario{
+    border: 0;
+    border-radius: 8px;
+    background-color: #ff2d3d;
+    color: white;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.boton-primario:hover{
+    background-color: white;
+    color: #ff2d3d;
+}
+
+.boton-primario:active{
+    transform: scale(0.8);
+}
+
+.boton-secundario{
+    border: 0;
+    border-radius: 8px;
+    background-color: #652786;
+    color: white;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.boton-secundario:hover{
+    background-color: white;
+    color: #652786;
+}
+
+.boton-secundario:active{
+    transform: scale(0.8);
+}
+
+.boton-icono{
+    border: 0;
+    background: none;
+    color: white;
+    padding: 0px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.boton-icono:active{
+    transform: scale(0.8);
+}
+
+/****************** Header ******************/
+.linea_dec{
+    background-color: #ff2d3d;
+    height: 20px;
+}
+
+.sesion{
+    background-color: #ffa500;
+    color: white;
+}
+
+.sesion .contenedor-iconos-sesion{
+    display: flex;
+    justify-content: space-between;
+}
+
+.sistema{
+    background-color: #652786;
+    color: #ffa500;
+    text-align: center;
+    padding: 20px;
+}
+
+.sistema .contenedor-iconos-nav{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+/****************** Login ******************/
+.body-login{
+    font-family: sans-serif;
+    padding-top: 4rem;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ffa500;
+}
+
+.body-login .contenedor-login{
+    min-width: 350px;
+    min-height: 400px;
+    background-color: whitesmoke;
+    border: 5px solid #652786;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    
+}
+
+.body-login h1{
+    text-align: center;
+    padding: 10px;
+    color: #ffa500;
+    background-color: #652786;
+    border: 2px solid #652786;
+    font-size: 20px;
+    margin-top: 0px;
+    
+}
+
+.body-login img{
+    display: block;
+    width: 6rem;
+    height: 6rem;
+    margin: 0 auto;
+}
+
+.body-login .contenedor-label{
+    display: flex;
+    justify-content: center;
+}
+
+.body-login{
+    margin-left: 10px;
+}
+
+.body-login input{
+    margin-left: 10px;
+    background: white;
+    border: none;
+    outline: 0px;
+    padding: 5px;
+    border-bottom: 2px solid #ff2d3d;
+}
+
+.body-login select{
+    background-color: #ff2d3d;
+    color: white;
+    border: none;
+    outline: 0px;
+    padding: 5px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.1s;
+}
+
+.body-login select:hover{
+    background: white;
+    color: #ff2d3d;
+}
+
+.body-login select:focus{
+    background: white;
+    color: #ff2d3d;
+}
+
+.body-login select:active{
+    transform: scale(0.9);
+}
+
+.body-login .submit{
+    display: block;
+    margin: 0 auto;
+}
+
+/****************** Inicio Directivo ******************/
+.contenedor-accion h2{
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border: 2px solid #652786;
+    background-color: #652786;
+    color: #ffa500;
+    padding: 5px;
+    text-align: center;
+}
+
+.body-inicioDirectivo p{
+    margin: 1rem;
+}
+
+.body-inicioDirectivo button{
+    display: block;
+    margin: 1rem auto;
+}
+
+.contenedor-accion{
+    border-radius: 15px;
+    background-color: #e9e3e3;
+}
+
+/****************** Inicio Profesor ******************/
+.body-inicioProfesor p{
+    margin: 1rem;
+}
+
+.body-inicioProfesor button{
+    display: block;
+    margin: 1rem auto;
+}
+
+/****************** Gestion Usuarios ******************/
+.body-gestionUsuarios .contenedor-accion-cuerpo{
+    min-height: 12rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.body-gestionUsuarios .contenedor-accion-cuerpo form{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+/****************** Gestion Alumnos ******************/
+
+.body-inicioAlumno p{
+    margin: 1rem;
+}
+
+.body-inicioAlumno button{
+    display: block;
+    margin: 1rem auto;
+}
+
+.body-gestionAlumnos .label-body{
+    color: #ffa500;
+}
+
+/****************** Reportes ******************/
+.body-reportes .contenedor-accion-cuerpo{
+    min-height: 12rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.body-reportes .contenedor-accion-cuerpo form{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    /* justify-content: space-evenly; */
+}
+
+.body-reportes .contenedor-accion-cuerpo label{
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.body-reportes .contenedor-accion-cuerpo button{
+    display: block;
+    margin: 0 auto;
+}
